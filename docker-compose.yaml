@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  financedb:
+    image: postgres:latest
+    container_name: financedb
+    hostname: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ./prisma/seeds:/tmp
+    ports:
+      - '5432:5432'
