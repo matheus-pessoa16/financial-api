@@ -2,19 +2,19 @@ import { gql } from "apollo-server-core";
 
 const CategorySchema = gql`
     
-    type Categorie {
+    type Category {
         id: String
         name: String
         color: String
     }
 
     type Query {
-        getAllCategories: [Categorie]
-        getCategorie(id: String): Categorie
+        getAllCategories: [Category]
+        getCategory(id: String): Category
     }
 
     type Mutation {
-        updateCategorie(id: String, name: String, color: String): Categorie
+        updateCategorie(id: String, name: String, color: String): Category
     }
 `
 

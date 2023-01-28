@@ -8,7 +8,7 @@ export const resolvers = {
             ]
         },
 
-        getCategorie: (_: any, args: any) => {
+        getCategory: (_: any, args: any) => {
             return { id: "0c600155-27a0-40ce-9df5-523f2831ff56", name: "Charges/Fees", color: "ffbf84" }
         }
     },

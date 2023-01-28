@@ -1,8 +1,5 @@
 import { gql } from "apollo-server-core";
 
-
-//"id","accountId","categoryId","reference","amount","currency","date"
-
 const TransactionSchema = gql`
 
     scalar DateTime
@@ -15,11 +12,14 @@ const TransactionSchema = gql`
         amount: Float
         currency: String 
         date: DateTime
+        category: Category
+        account: Account
     }
 
     type Query {
-        getAllTransactions: [Transaction]
-        getTransction(id: String): Transaction
+        getAllTransactions(page: Int = 0): [Transaction]
+        getTransaction(id: String): Transaction
+        countTransactions: Int
     }
 
     type Mutation {
