@@ -8,11 +8,60 @@ export const resolvers = {
 
         getAllTransactions: (_: any, args: any) => {
 
+            const { input: filter } = args;
+
+            const shouldApplyFilters = filter.categoryName !== undefined ||
+                filter.bank !== undefined || filter.accountName !== undefined ||
+                (filter.startDate !== undefined && filter.endDate !== undefined);
+
             const PAGE_SIZE = 10
 
             let skip = (args.page == 0 ? 0 : args.page - 1) * PAGE_SIZE
 
+            let filtersOptions = []
+
+            if (shouldApplyFilters) {
+
+                if (filter.categoryName) {
+                    filtersOptions.push({ category: { name: filter.categoryName } })
+                }
+
+                if (filter.bank) {
+                    filtersOptions.push({ account: { bank: filter.bank } })
+                }
+
+                if (filter.accountName) {
+                    filtersOptions.push({ account: { name: filter.accountName } })
+                }
+
+                if (filter.startDate && filter.endDate) {
+
+                    let startDateString = filter.startDate + '-01'
+                    let startDate: Date = new Date(startDateString)
+
+                    let endDate = filter.endDate.split('-')
+                    var lastDayOfMonth = new Date(parseInt(endDate[0]), parseInt(endDate[1]) + 1, 0).getDate();
+                    endDate = new Date(filter.endDate + '-' + lastDayOfMonth)
+
+                    filtersOptions.push({
+                        date: {
+                            lte: endDate,
+                            gte: startDate,
+                        }
+                    })
+                }
+            }
+
+
+            const where = shouldApplyFilters
+                ? {
+                    AND: [...filtersOptions],
+                }
+                : {}
+
+
             return prisma.transaction.findMany({
+                where,
                 take: PAGE_SIZE,
                 skip,
                 orderBy: {
@@ -21,8 +70,10 @@ export const resolvers = {
                 include: {
                     category: true,
                     account: true
-                }
+                },
             })
+
+
 
         },
 
@@ -45,10 +96,18 @@ export const resolvers = {
     },
 
     Mutation: {
-        updateTransaction: (_: any, args: any) => {
-            console.log(args)
+        updateTransactionCategory: (_: any, args: any) => {
 
-            return { id: "56b80608-ed28-4182-a509-09ff9deb3ec9", accountId: "a3bbb581-7e91-488e-a416-8ac8f5f6f5be", categoryId: "11bb7aa7-61e6-4753-b3f2-365f83694417", reference: "Underministry Hexeikosane Tisicky", amount: -3.99, currency: "GBP", date: "2017-09-01 23:00:00.000" }
+            return prisma.transaction.update({
+                where: { id: args.id },
+                data: {
+                    category: { connect: { id: args.categoryId } }
+                },
+                include: {
+                    category: true,
+                    account: true
+                }
+            })
 
         }
     }

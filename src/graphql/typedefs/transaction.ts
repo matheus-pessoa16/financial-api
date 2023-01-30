@@ -16,14 +16,22 @@ const TransactionSchema = gql`
         account: Account
     }
 
+    input TransactionFilters {
+        bank: String
+        categoryName: String
+        accountName: String
+        startDate: DateTime
+        endDate: DateTime
+    }
+
     type Query {
-        getAllTransactions(page: Int = 0): [Transaction]
+        getAllTransactions(page: Int = 0, input: TransactionFilters = {}): [Transaction]
         getTransaction(id: String): Transaction
         countTransactions: Int
     }
 
     type Mutation {
-        updateTransaction(id: String, categoryId: String): Transaction
+        updateTransactionCategory(id: String, categoryId: String): Transaction
     }
 `
 

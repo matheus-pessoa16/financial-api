@@ -14,7 +14,7 @@ const CategorySchema = gql`
     }
 
     type Mutation {
-        updateCategorie(id: String, name: String, color: String): Category
+        createCategorie(name: String, color: String): Category
     }
 `
 

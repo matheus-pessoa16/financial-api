@@ -11,7 +11,6 @@ export const resolvers = {
         },
 
         getAccount: (_: any, args: any) => {
-            console.log(args)
             return prisma.account.findUnique({
                 where: {
                     id: args.id
@@ -20,11 +19,4 @@ export const resolvers = {
         }
     },
 
-    Mutation: {
-        updateAccount: (_: any, args: any) => {
-            console.log(args)
-
-            return { id: "4d4e9f76-7d97-42a8-b1ec-360a127acb27", name: "Checking Account (EUR)", bank: "Airbank" };
-        }
-    }
 };
